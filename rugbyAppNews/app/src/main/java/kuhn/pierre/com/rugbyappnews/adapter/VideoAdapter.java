@@ -5,9 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import kuhn.pierre.com.rugbyappnews.R;
 import kuhn.pierre.com.rugbyappnews.utils.Video;
 
 /**
@@ -17,11 +22,13 @@ public class VideoAdapter extends BaseAdapter {
 
     List<Video> mVideoList;
     private LayoutInflater mInflater;
+    ImageLoader mImageLoader;
 
 
     public VideoAdapter(Context context, List<Video> videoList){
         this.mVideoList = videoList;
         this.mInflater = LayoutInflater.from(context);
+        mImageLoader = ImageLoader.getInstance();
     }
 
 
@@ -43,10 +50,14 @@ public class VideoAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
-            //convertView = mInflater.inflate(R.layout.list_video);
-
-
-
+            convertView = mInflater.inflate(R.layout.list_video, null);
         }
+        Video videoTmp = mVideoList.get(position);
+        ImageView thumbIV = (ImageView) convertView.findViewById(R.id.thumbIV);
+        TextView title = (TextView) convertView.findViewById(R.id.titleTV);
+        mImageLoader.displayImage(videoTmp.getThumbUrl(),thumbIV);
+        title.setText(videoTmp.getTitle());
+
+        return convertView;
     }
 }

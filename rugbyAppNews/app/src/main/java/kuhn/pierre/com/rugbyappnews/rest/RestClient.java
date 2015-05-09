@@ -68,8 +68,8 @@ public class RestClient {
                 JsonObject jsonObject = json.getAsJsonObject();
                 JsonArray jsonArray = jsonObject.getAsJsonArray("items");
                 for(int i = 0; i<jsonArray.size(); i++){
-                    String id = jsonArray.get(i).getAsJsonObject().getAsJsonObject("id").get("videoId").toString();
-                    String title = jsonArray.get(i).getAsJsonObject().getAsJsonObject("snippet").get("title").toString();
+                    String id = jsonArray.get(i).getAsJsonObject().getAsJsonObject("id").get("videoId").toString().replace("\"","");
+                    String title = jsonArray.get(i).getAsJsonObject().getAsJsonObject("snippet").get("title").toString().replace("\"","");
                     String thumbUrl = THUMBNAIL_BASE_URL+id+"/"+THUMBNAIL_EXTENSION;
                     Video video = new Video(title, id, thumbUrl);
                     mVideoList.add(video);

@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import kuhn.pierre.com.rugbyappnews.adapter.VideoAdapter;
 import kuhn.pierre.com.rugbyappnews.rest.RestClient;
 import kuhn.pierre.com.rugbyappnews.utils.Video;
 
@@ -23,7 +24,8 @@ public class MainActivity extends ActionBarActivity {
 
         mVideoListView = (ListView) findViewById(R.id.videoLV);
         mVideoList = RestClient.getInstance().getmVideoList();
-
+        VideoAdapter videoAdapter = new VideoAdapter(getApplicationContext(), mVideoList);
+        mVideoListView.setAdapter(videoAdapter);
     }
 
     @Override

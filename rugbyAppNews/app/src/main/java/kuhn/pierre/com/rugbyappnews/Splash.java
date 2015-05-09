@@ -1,5 +1,6 @@
 package kuhn.pierre.com.rugbyappnews;
 
+import android.app.Application;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ public class Splash extends ActionBarActivity {
             @Override
             public void run() {
                 RestClient restClient = RestClient.getInstance();
-                restClient.getVideoListFromChannel(getApplicationContext());
+                restClient.getVideoListFromChannel(Splash.this);
 
             }
         }, 2000);
