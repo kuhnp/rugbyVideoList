@@ -6,12 +6,12 @@ package kuhn.pierre.com.rugbyappnews.utils;
 public class Video {
 
     private String title;
-    private String url;
+    private String id;
     private String thumbUrl;
 
-    public Video(String title, String url, String thumbUrl) {
+    public Video(String title, String id, String thumbUrl) {
         this.title = title;
-        this.url = url;
+        this.id = id;
         this.thumbUrl = thumbUrl;
     }
 
@@ -26,7 +26,7 @@ public class Video {
      * @return the url to this video on youtube
      */
     public String getUrl() {
-        return url;
+        return id;
     }
 
     /**

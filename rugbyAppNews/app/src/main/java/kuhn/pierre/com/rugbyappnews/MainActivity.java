@@ -6,16 +6,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.List;
+
+import kuhn.pierre.com.rugbyappnews.rest.RestClient;
+import kuhn.pierre.com.rugbyappnews.utils.Video;
+
 
 public class MainActivity extends ActionBarActivity {
 
     private ListView mVideoListView;
+    private List<Video> mVideoList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mVideoListView = (ListView) findViewById(R.id.videoLV);
+        mVideoList = RestClient.getInstance().getmVideoList();
 
     }
 

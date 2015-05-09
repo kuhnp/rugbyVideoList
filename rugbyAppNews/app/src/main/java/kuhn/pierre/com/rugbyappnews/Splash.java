@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import kuhn.pierre.com.rugbyappnews.rest.RestClient;
+
 
 public class Splash extends ActionBarActivity {
 
@@ -17,7 +19,8 @@ public class Splash extends ActionBarActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                RestClient restClient = RestClient.getInstance();
+                restClient.getVideoListFromChannel(getApplicationContext());
 
             }
         }, 2000);
