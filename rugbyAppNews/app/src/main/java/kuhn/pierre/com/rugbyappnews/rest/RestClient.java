@@ -62,7 +62,7 @@ public class RestClient {
     }
 
     public void getVideoListFromChannel(final Context context){
-        mApi.getVideosFromChannel(PART, CHANNEL_ID, MAX_RESULT, "", TYPE, new Callback<JsonElement>() {
+        mApi.getVideosFromChannel(PART, CHANNEL_ID, MAX_RESULT, "AIzaSyBDvcYXThet9b1eS8cVJYJrFRiDKvR5Bts", TYPE, new Callback<JsonElement>() {
             @Override
             public void success(JsonElement json, Response response) {
                 JsonObject jsonObject = json.getAsJsonObject();

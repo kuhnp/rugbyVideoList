@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -20,10 +21,9 @@ import kuhn.pierre.com.rugbyappnews.utils.Video;
  */
 public class VideoAdapter extends BaseAdapter {
 
-    List<Video> mVideoList;
+    private List<Video> mVideoList;
     private LayoutInflater mInflater;
-    ImageLoader mImageLoader;
-
+    private ImageLoader mImageLoader;
 
     public VideoAdapter(Context context, List<Video> videoList){
         this.mVideoList = videoList;

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="dark_grey">#e8262926</color>
+    <color name="shadow">#555555</color>
+    <color name="title">#777777</color>
+    <color name="white_background">#ffe7e9df</color>
 
 
 
