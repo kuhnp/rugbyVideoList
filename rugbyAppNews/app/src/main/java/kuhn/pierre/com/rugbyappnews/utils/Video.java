@@ -1,7 +1,7 @@
 package kuhn.pierre.com.rugbyappnews.utils;
 
 /**
- * Created by pierre on 09/05/2015.
+ * Created by pierre
  */
 public class Video {
 

@@ -8,16 +8,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 import kuhn.pierre.com.rugbyappnews.R;
 import kuhn.pierre.com.rugbyappnews.utils.Video;
 
 /**
- * Created by pierre on 09/05/2015.
+ * Created by pierre
  */
 public class VideoAdapter extends BaseAdapter {
 

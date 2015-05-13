@@ -1,15 +1,11 @@
 package kuhn.pierre.com.rugbyappnews;
 
-import android.util.DisplayMetrics;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 /**
- * Created by pierre on 09/05/2015.
+ * Created by pierre
  */
 public class MyApplication extends android.app.Application {
 
@@ -23,7 +19,7 @@ public class MyApplication extends android.app.Application {
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
-                .showImageOnLoading(R.drawable.abc_btn_radio_material)
+                .showImageOnLoading(R.drawable.rugby_logo)
                 .build();
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())

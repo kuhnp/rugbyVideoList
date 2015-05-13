@@ -57,11 +57,10 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         TwitterAuthConfig authConfig =
-                new TwitterAuthConfig("lLFt7Di2HIqf1KhevuhKD2knQ",
-                        "2I7ftK4ZztDFvjbcUKlLZFVbBuU0liFWXvDrN7DiVVXYnt840i");
+                new TwitterAuthConfig(getString(R.string.twitter_key_1),
+                        getString(R.string.twitter_key_2));
         Fabric.with(this, new Twitter(authConfig));
         Fabric.with(this, new TweetComposer());
-
 
         mVideoListView = (ListView) findViewById(R.id.videoLV);
         mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_view);
@@ -85,7 +84,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     mPlayerLayout.setVisibility(View.VISIBLE);
                 }
                 isVideoShown = true;
-                mYouTubePlayerView.initialize("AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do", this);
+                mYouTubePlayerView.initialize(getString(R.string.youtube_api_key), this);
             }
         }
 
@@ -156,7 +155,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         fbShareB.setShareContent(content);
         if(mPlayer != null)
             mPlayer.release();
-        mYouTubePlayerView.initialize("AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do", this);
+        mYouTubePlayerView.initialize(getString(R.string.youtube_api_key), this);
         showPlayerOnScreen();
     }
 
@@ -192,7 +191,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(MainActivity.this, "Failed to get the video", Toast.LENGTH_SHORT);
+        Toast.makeText(MainActivity.this, getString(R.string.player_load_fail), Toast.LENGTH_SHORT).show();
     }
 
     @Override

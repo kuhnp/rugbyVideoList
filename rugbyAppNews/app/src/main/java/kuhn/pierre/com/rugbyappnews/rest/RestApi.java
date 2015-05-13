@@ -18,7 +18,7 @@ import retrofit.http.POST;
 import retrofit.http.Query;
 
 /**
- * Created by pierre on 09/05/2015.
+ * Created by pierre
  */
 public interface RestApi {
 
@@ -31,19 +31,5 @@ public interface RestApi {
                 @Query("type") String type,
                 Callback<JsonElement> response
                 );
-
-    @FormUrlEncoded
-    @POST("/videos/rate")
-        public void rateVideo(
-                @Query("access_token") String token,
-                @Query("key") String apiKey,
-                @Field("id") String videoId,
-                @Field("rate") String rate,
-                Callback<JsonElement> response
-    );
-
-
-
-
 }
 

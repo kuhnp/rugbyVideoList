@@ -1,8 +1,7 @@
 package kuhn.pierre.com.rugbyappnews;
 
-import android.app.Application;
+import android.app.Activity;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +9,7 @@ import android.view.MenuItem;
 import kuhn.pierre.com.rugbyappnews.rest.RestClient;
 
 
-public class Splash extends ActionBarActivity {
+public class Splash extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
