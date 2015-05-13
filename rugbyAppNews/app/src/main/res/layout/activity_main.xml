@@ -1,6 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fb="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -11,36 +14,56 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:dividerHeight="5dp"
-        android:divider="@null"
-    />
+        android:divider="@null"/>
+
 
     <RelativeLayout
         android:id="@+id/player_layout"
         android:layout_width="fill_parent"
         android:layout_height="250dp"
         android:background="@color/bright_foreground_material_dark"
-        android:visibility="gone">
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible">
+
         <com.google.android.youtube.player.YouTubePlayerView
             android:id="@+id/youtube_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginBottom="30dp"
-            />
+            android:layout_marginBottom="30dp"/>
 
-        <Button
-            android:id="@+id/player_close_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="close"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true">
 
+            <Button
+                android:id="@+id/player_close_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/close"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_alignParentRight="true"/>
+
+            <com.facebook.share.widget.ShareButton
+                android:id="@+id/fb_share_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_toRightOf="@+id/twitter_share_button"
+                android:layout_marginLeft="12dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/facebook" />
+
+            <Button
+                android:id="@+id/twitter_share_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/twitter"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
-
-
-
-
 
 </RelativeLayout>

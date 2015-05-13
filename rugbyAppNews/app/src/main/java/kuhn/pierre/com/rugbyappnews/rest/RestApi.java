@@ -9,7 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
+import retrofit.http.Body;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.POST;
 import retrofit.http.Query;
 
 /**
@@ -26,6 +31,16 @@ public interface RestApi {
                 @Query("type") String type,
                 Callback<JsonElement> response
                 );
+
+    @FormUrlEncoded
+    @POST("/videos/rate")
+        public void rateVideo(
+                @Query("access_token") String token,
+                @Query("key") String apiKey,
+                @Field("id") String videoId,
+                @Field("rate") String rate,
+                Callback<JsonElement> response
+    );
 
 
 

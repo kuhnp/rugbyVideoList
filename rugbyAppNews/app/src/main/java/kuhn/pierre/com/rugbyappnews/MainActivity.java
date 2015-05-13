@@ -1,42 +1,51 @@
 package kuhn.pierre.com.rugbyappnews;
 
-import android.content.Intent;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import kuhn.pierre.com.rugbyappnews.adapter.VideoAdapter;
 import kuhn.pierre.com.rugbyappnews.rest.RestClient;
-import kuhn.pierre.com.rugbyappnews.utils.OnSwipeTouchListener;
 import kuhn.pierre.com.rugbyappnews.utils.Video;
 
 
 public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener{
 
+    static final String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=";
+
     private ListView mVideoListView;
-    private List<Video> mVideoList;
     private YouTubePlayerView mYouTubePlayerView;
     private RelativeLayout mPlayerLayout;
-    private String mVideoSelectedId;
     private Button mClosePlayerB;
+    private ShareButton fbShareB;
+    private Button tweetB;
+
+    private List<Video> mVideoList;
+    private String mVideoSelectedId;
     private boolean isVideoShown;
     private YouTubePlayer mPlayer;
 
@@ -44,34 +53,29 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+        TwitterAuthConfig authConfig =
+                new TwitterAuthConfig("lLFt7Di2HIqf1KhevuhKD2knQ",
+                        "2I7ftK4ZztDFvjbcUKlLZFVbBuU0liFWXvDrN7DiVVXYnt840i");
+        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new TweetComposer());
+
 
         mVideoListView = (ListView) findViewById(R.id.videoLV);
+        mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         mPlayerLayout = (RelativeLayout) findViewById(R.id.player_layout);
-        mVideoList = RestClient.getInstance().getmVideoList();
         mClosePlayerB = (Button) findViewById(R.id.player_close_button);
+        fbShareB = (ShareButton) findViewById(R.id.fb_share_button);
+        tweetB = (Button) findViewById(R.id.twitter_share_button);
+
+        fbShareB.setBackgroundResource(R.drawable.facebook);
+        fbShareB.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        fbShareB.setText("");
+
+        mVideoList = RestClient.getInstance().getmVideoList();
         VideoAdapter videoAdapter = new VideoAdapter(getApplicationContext(), mVideoList);
         mVideoListView.setAdapter(videoAdapter);
-        mVideoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                loadYoutubePlayerOnScreen(mVideoList.get(position).getUrl());
-            }
-        });
-
-        mClosePlayerB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPlayer.release();
-                mPlayerLayout.setVisibility(View.GONE);
-                isVideoShown = false;
-            }
-        });
-
-        mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_view);
-
-
 
         if(savedInstanceState != null){
             if(savedInstanceState.getBoolean("isVideoShown"))
@@ -79,8 +83,37 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         }
 
 
+        mVideoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                loadYoutubePlayerOnScreen(mVideoList.get(position).getUrl());
+
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.BELOW, R.id.player_layout);
+
+                mVideoListView.setLayoutParams(params);
+            }
+        });
+
+        mClosePlayerB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPlayer.release();
+                hidePlayerOnScreen();
+                isVideoShown = false;
+            }
+        });
+
+        tweetB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TweetComposer.Builder builder = new TweetComposer.Builder(MainActivity.this)
+                        .text(YOUTUBE_VIDEO_URL+mVideoSelectedId);
+                builder.show();
+            }
+        });
     }
 
     @Override
@@ -108,23 +141,43 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     public void loadYoutubePlayerOnScreen(String videoId){
         isVideoShown = true;
-        mPlayerLayout.setVisibility(View.VISIBLE);
         mVideoSelectedId = videoId;
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(YOUTUBE_VIDEO_URL+mVideoSelectedId))
+                .build();
+
+        fbShareB.setShareContent(content);
         if(mPlayer != null)
             mPlayer.release();
-        mYouTubePlayerView.initialize("AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do",this);
+        mYouTubePlayerView.initialize("AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do", this);
+        showPlayerOnScreen();
     }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if(!b) {
-            mPlayer = youTubePlayer;
-            youTubePlayer.loadVideo(mVideoSelectedId);
+            if(mVideoSelectedId != null) {
+                mPlayer = youTubePlayer;
+                youTubePlayer.loadVideo(mVideoSelectedId);
+            }
         }
+    }
+
+    private void showPlayerOnScreen(){
+        mPlayerLayout.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_slide_in_top);
+        mPlayerLayout.startAnimation(animation);
+    }
+
+    private void hidePlayerOnScreen(){
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_slide_out_top);
+        mPlayerLayout.startAnimation(animation);
+        mPlayerLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        Toast.makeText(MainActivity.this, "Failed to get the video", Toast.LENGTH_SHORT);
     }
 
     @Override
