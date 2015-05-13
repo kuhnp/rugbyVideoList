@@ -33,7 +33,7 @@ import kuhn.pierre.com.rugbyappnews.rest.RestClient;
 import kuhn.pierre.com.rugbyappnews.utils.Video;
 
 
-public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener{
+public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     static final String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=";
 
@@ -47,6 +47,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     private List<Video> mVideoList;
     private String mVideoSelectedId;
     private boolean isVideoShown;
+    private boolean isFullScreen;
     private YouTubePlayer mPlayer;
 
     @Override
@@ -78,8 +79,14 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         mVideoListView.setAdapter(videoAdapter);
 
         if(savedInstanceState != null){
-            if(savedInstanceState.getBoolean("isVideoShown"))
-                mYouTubePlayerView.initialize("AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do",this);
+            if(savedInstanceState.getBoolean("isVideoShown")) {
+                if(savedInstanceState.getBoolean("isFullScreen")){
+                    isFullScreen = true;
+                    mPlayerLayout.setVisibility(View.VISIBLE);
+                }
+                isVideoShown = true;
+                mYouTubePlayerView.initialize("AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do", this);
+            }
         }
 
 
@@ -161,6 +168,14 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                 youTubePlayer.loadVideo(mVideoSelectedId);
             }
         }
+        else{
+            youTubePlayer.play();
+            if(isFullScreen)
+                isFullScreen = false;
+            else
+                isFullScreen = true;
+            mPlayer = youTubePlayer;
+        }
     }
 
     private void showPlayerOnScreen(){
@@ -186,8 +201,24 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             bundle.putBoolean("isVideoShown", isVideoShown);
         else
             bundle.putBoolean("isVideoShown", false);
+        if(isFullScreen )
+            bundle.putBoolean("isFullScreen", isFullScreen);
+        else
+            bundle.putBoolean("isFullScreen", false);
 
         super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isVideoShown && isFullScreen){
+            mPlayer.setFullscreen(false);
+        }
+        else if(isVideoShown){
+            mPlayer.release();
+            hidePlayerOnScreen();
+            isVideoShown = false;
+        }
     }
 
 }
