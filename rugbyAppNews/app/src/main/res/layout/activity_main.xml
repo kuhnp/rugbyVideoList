@@ -52,7 +52,7 @@
                 android:layout_toRightOf="@+id/twitter_share_button"
                 android:layout_marginLeft="12dp"
                 android:layout_centerVertical="true"
-                android:background="@drawable/facebook" />
+                android:background="@drawable/facebook"/>
 
             <Button
                 android:id="@+id/twitter_share_button"

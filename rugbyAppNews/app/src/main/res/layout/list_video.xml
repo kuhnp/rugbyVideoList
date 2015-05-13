@@ -14,7 +14,6 @@
         android:id="@+id/titleTV"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="saluuuuut"
         android:textColor="@color/dark_grey"
         android:layout_toRightOf="@id/thumbIV"
         android:layout_marginLeft="8dp"/>
