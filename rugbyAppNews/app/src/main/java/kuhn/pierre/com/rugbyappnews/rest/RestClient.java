@@ -3,20 +3,15 @@ package kuhn.pierre.com.rugbyappnews.rest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import kuhn.pierre.com.rugbyappnews.MainActivity;
 import kuhn.pierre.com.rugbyappnews.R;
@@ -66,8 +61,13 @@ public class RestClient {
         return mInstance;
     }
 
+    /**
+     * Method to get the 50 last video from the Youtube channel "World Rugby", using the Retrofit library.
+     * @param context
+     */
     public void getVideoListFromChannel(final Context context){
-        mApi.getVideosFromChannel(PART, CHANNEL_ID, MAX_RESULT, Resources.getSystem().getString(R.string.youtube_api_key), TYPE, new Callback<JsonElement>() {
+
+        mApi.getVideosFromChannel(PART, CHANNEL_ID, MAX_RESULT, context.getString(R.string.youtube_web_api_key), TYPE, new Callback<JsonElement>() {
             @Override
             public void success(JsonElement json, Response response) {
                 JsonObject jsonObject = json.getAsJsonObject();
@@ -88,6 +88,13 @@ public class RestClient {
             }
             @Override
             public void failure(RetrofitError error) {
+
+                if(error.getResponse().getStatus() == 401 || error.getResponse().getStatus() == 403)
+                    Toast.makeText(context, context.getString(R.string.play_service_api_error), Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(context, context.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    ((Activity)context).finish();
+                }
 
             }
         });

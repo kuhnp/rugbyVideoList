@@ -30,7 +30,7 @@ public class Video {
     }
 
     /**
-     * @return the thumbUrl of a still image representation of this video
+     * @return the thumbnail Image Url
      */
     public String getThumbUrl() {
         return thumbUrl;

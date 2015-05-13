@@ -16,6 +16,8 @@ import kuhn.pierre.com.rugbyappnews.utils.Video;
 
 /**
  * Created by pierre
+ * Adapter class which constructs the list of video.
+ * The thumbnail images are displayed using Universal Image Loader Library.
  */
 public class VideoAdapter extends BaseAdapter {
 

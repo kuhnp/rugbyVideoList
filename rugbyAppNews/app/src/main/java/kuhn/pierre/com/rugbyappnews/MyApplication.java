@@ -15,6 +15,9 @@ public class MyApplication extends android.app.Application {
         setupImageLoader();
     }
 
+    /**
+     * Set up Universal Image Loader library when the application is created.
+     */
     public void setupImageLoader(){
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

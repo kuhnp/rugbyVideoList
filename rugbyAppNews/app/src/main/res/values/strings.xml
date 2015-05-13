@@ -4,10 +4,16 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_splash">Splash</string>
+    
     <string name="player_load_fail">Failed to get the video</string>
+    <string name="play_service_api_error">Error with Google Play Services</string>
+    <string name="network_error">Network Error, check your internet connexion</string>
 
     <string name="facebook_app_id">101455840190707</string>
     <string name="twitter_key_1">lLFt7Di2HIqf1KhevuhKD2knQ</string>
     <string name="twitter_key_2">2I7ftK4ZztDFvjbcUKlLZFVbBuU0liFWXvDrN7DiVVXYnt840i</string>
-    <string name="youtube_api_key">AIzaSyCdoQ7E1XOgtMRskJ4-EZN3b19VMz5u9do</string>
+    <string name="youtube_api_key">AIzaSyDjZY7kP4K1DkJzQnFIcB7oHg3PJ9hZQxY</string>
+    <string name="youtube_web_api_key">AIzaSyBDvcYXThet9b1eS8cVJYJrFRiDKvR5Bts</string>
+    
+    
 </resources>

@@ -32,10 +32,14 @@ import kuhn.pierre.com.rugbyappnews.adapter.VideoAdapter;
 import kuhn.pierre.com.rugbyappnews.rest.RestClient;
 import kuhn.pierre.com.rugbyappnews.utils.Video;
 
-
+/**
+ * Main Activity class that contains a listView of videos and a Youtube player.
+ */
 public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     static final String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=";
+    static final String BUNDLE_SAVE_IS_SHOWN = "isVideoShown";
+    static final String BUNDLE_SAVE_IS_FULL_SCREEN = "isFullScreen";
 
     private ListView mVideoListView;
     private YouTubePlayerView mYouTubePlayerView;
@@ -54,14 +58,18 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialise FB sdk
         FacebookSdk.sdkInitialize(getApplicationContext());
+
         setContentView(R.layout.activity_main);
+        // Initialise Twitter sdk
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig(getString(R.string.twitter_key_1),
                         getString(R.string.twitter_key_2));
         Fabric.with(this, new Twitter(authConfig));
         Fabric.with(this, new TweetComposer());
 
+        //Get the views
         mVideoListView = (ListView) findViewById(R.id.videoLV);
         mYouTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         mPlayerLayout = (RelativeLayout) findViewById(R.id.player_layout);
@@ -78,8 +86,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         mVideoListView.setAdapter(videoAdapter);
 
         if(savedInstanceState != null){
-            if(savedInstanceState.getBoolean("isVideoShown")) {
-                if(savedInstanceState.getBoolean("isFullScreen")){
+            if(savedInstanceState.getBoolean(BUNDLE_SAVE_IS_SHOWN)) {
+                if(savedInstanceState.getBoolean(BUNDLE_SAVE_IS_FULL_SCREEN)){
                     isFullScreen = true;
                     mPlayerLayout.setVisibility(View.VISIBLE);
                 }
@@ -94,11 +102,10 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 loadYoutubePlayerOnScreen(mVideoList.get(position).getUrl());
-
+                // Set the listView below the Youtube Player.
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.BELOW, R.id.player_layout);
-
                 mVideoListView.setLayoutParams(params);
             }
         });
@@ -115,6 +122,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         tweetB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Build the tweet
                 TweetComposer.Builder builder = new TweetComposer.Builder(MainActivity.this)
                         .text(YOUTUBE_VIDEO_URL+mVideoSelectedId);
                 builder.show();
@@ -146,13 +154,15 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
 
     public void loadYoutubePlayerOnScreen(String videoId){
+        // Load the Youtube Player
         isVideoShown = true;
         mVideoSelectedId = videoId;
+        // Prepare the FB post
         ShareLinkContent content = new ShareLinkContent.Builder()
                 .setContentUrl(Uri.parse(YOUTUBE_VIDEO_URL+mVideoSelectedId))
                 .build();
-
         fbShareB.setShareContent(content);
+
         if(mPlayer != null)
             mPlayer.release();
         mYouTubePlayerView.initialize(getString(R.string.youtube_api_key), this);
@@ -162,6 +172,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if(!b) {
+            //First time the Player is initialized
             if(mVideoSelectedId != null) {
                 mPlayer = youTubePlayer;
                 youTubePlayer.loadVideo(mVideoSelectedId);
@@ -177,33 +188,43 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         }
     }
 
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        Toast.makeText(MainActivity.this, getString(R.string.player_load_fail), Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * Show the Youtube Player on the screen with an animation slide in top
+     */
     private void showPlayerOnScreen(){
         mPlayerLayout.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_slide_in_top);
         mPlayerLayout.startAnimation(animation);
     }
 
+    /**
+     * Hide de player on the screen with an animation slide out top
+     */
     private void hidePlayerOnScreen(){
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_slide_out_top);
         mPlayerLayout.startAnimation(animation);
         mPlayerLayout.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(MainActivity.this, getString(R.string.player_load_fail), Toast.LENGTH_SHORT).show();
-    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
+        // Save states in the Bundle object to handle screen orientation changes
         if(isVideoShown)
-            bundle.putBoolean("isVideoShown", isVideoShown);
+            bundle.putBoolean(BUNDLE_SAVE_IS_SHOWN, isVideoShown);
         else
-            bundle.putBoolean("isVideoShown", false);
+            bundle.putBoolean(BUNDLE_SAVE_IS_SHOWN, false);
         if(isFullScreen )
-            bundle.putBoolean("isFullScreen", isFullScreen);
+            bundle.putBoolean(BUNDLE_SAVE_IS_FULL_SCREEN, isFullScreen);
         else
-            bundle.putBoolean("isFullScreen", false);
+            bundle.putBoolean(BUNDLE_SAVE_IS_FULL_SCREEN, false);
 
         super.onSaveInstanceState(bundle);
     }
