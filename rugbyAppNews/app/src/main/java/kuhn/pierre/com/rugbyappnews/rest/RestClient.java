@@ -89,13 +89,8 @@ public class RestClient {
             @Override
             public void failure(RetrofitError error) {
 
-                if(error.getResponse().getStatus() == 401 || error.getResponse().getStatus() == 403)
-                    Toast.makeText(context, context.getString(R.string.play_service_api_error), Toast.LENGTH_SHORT).show();
-                else{
-                    Toast.makeText(context, context.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                    ((Activity)context).finish();
-                }
-
+                Toast.makeText(context, context.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                ((Activity)context).finish();
             }
         });
     }
