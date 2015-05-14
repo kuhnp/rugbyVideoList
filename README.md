@@ -1,4 +1,4 @@
 # RugbyMotion
 
 Get the latest Rugby news.
-For Rugby Fan
+For Rugby fans
